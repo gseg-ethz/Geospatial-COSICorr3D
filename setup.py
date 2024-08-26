@@ -1,6 +1,20 @@
 from setuptools import setup, find_packages
+import glob
+import os
 
 if __name__ == '__main__':
+    # lib_files = []
+    # lib_directories = glob.glob("lib/**/", recursive=True)
+    # for d in lib_directories:
+    #     files = glob.glob(os.path.join(d, '*'))
+    #     if files:
+    #         lib_files.append((f"lib/geoCosiCorr3D/{d[4:]}", [f for f in files if os.path.isfile(f)]))
+    lib_files = [
+        (f"lib/geoCosiCorr3D/{d[4:]}", [f for f in glob.glob(os.path.join(d, '*')) if os.path.isfile(f)])
+        for d in glob.glob("lib/**/", recursive=True)
+        if glob.glob(os.path.join(d, '*'))
+    ]
+
     setup(
         name='geoCosiCorr3D',
         version='2.5.0',
@@ -31,4 +45,9 @@ if __name__ == '__main__':
         package_data={
             'geoCosiCorr3D': ['py.typed'],
         },
+        data_files=
+            lib_files +
+            [
+                ('etc/geoCosiCorr3D', ['./setup.cfg'])
+            ]
     )
